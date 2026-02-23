@@ -8,7 +8,10 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f7f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .container { background-color: #ffffff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 40px; width: 100%; max-width: 550px; text-align: center; }
-        .logo-placeholder { width: 120px; height: 120px; background-color: #2e7d32; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; font-size: 14px; font-weight: bold; border: 4px solid #c8e6c9; }
+        
+        /* تنسيق اللوجو الجديد */
+        .logo-img { width: 150px; max-height: 150px; object-fit: contain; margin: 0 auto 20px; display: block; }
+        
         h2 { color: #2e7d32; margin-bottom: 20px; }
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-box input { flex: 1; padding: 12px; border: 2px solid #c8e6c9; border-radius: 8px; font-size: 16px; outline: none; }
@@ -37,7 +40,8 @@
 <body>
 
 <div class="container">
-    <div class="logo-placeholder">سفراء البصمة<br>الكربونية</div>
+    <img src="logo.png" alt="شعار المؤسسة" class="logo-img">
+    
     <h2>استعلام النتيجة النهائية</h2>
     <p style="color: #666; margin-bottom: 20px;">الرجاء إدخال رقم الواتساب أو الاسم الرباعي لمعرفة نتيجتك</p>
     
@@ -92,7 +96,6 @@
             complete: function(results) {
                 const data = results.data;
                 data.forEach(row => {
-                    // التأكد من وجود البيانات وتخزينها
                     if (row['رقم الواتساب'] && row['الاسم الرباعي']) {
                         const phone = String(row['رقم الواتساب']).trim();
                         const name = String(row['الاسم الرباعي']).trim();
@@ -113,13 +116,11 @@
                             "status": row['النتيجة النهائية'] || ""
                         };
                         
-                        // الحفظ لتسهيل البحث بالرقم أو الاسم
                         studentData[phone] = studentObj;
                         studentData[name] = studentObj;
                     }
                 });
                 
-                // إخفاء رسالة التحميل وتفعيل زر البحث
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('search-btn').disabled = false;
             },
@@ -130,10 +131,8 @@
         });
     }
 
-    // تشغيل الدالة فوراً
     window.onload = loadDataFromGoogleSheets;
 
-    // دالة إظهار النتيجة للمتدرب
     function checkResult() {
         const input = document.getElementById('search-input').value.trim();
         const result = studentData[input]; 
@@ -163,7 +162,6 @@
             const congratsEl = document.getElementById('congrats-text');
             const grandBox = document.getElementById('grand-box');
             
-            // شرط النجاح: 18 درجة فأكثر
             if (result.grand_total >= 18) { 
                 congratsEl.innerText = 'ألف مبروك! 🎉 (اجتياز)'; 
                 congratsEl.style.color = '#2e7d32'; 
